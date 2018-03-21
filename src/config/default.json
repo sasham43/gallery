@@ -1,0 +1,5 @@
+{
+  "gallery-db": {
+    "connection": "postgresql://sashakramer@localhost:5432/gallery-db"
+  }
+}
