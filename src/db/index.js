@@ -24,9 +24,9 @@ module.exports = function(name, thing){
     },{
       scripts: require('path').join(__dirname, '../db')
     }).then(function(db){
-        console.log('connected to db:',db.loader.scripts)
+        // console.log('connected to db:',db.loader.scripts)
         connections[name] = db;
-        console.log('connections2:', thing,Object.keys(connections))
+        // console.log('connections2:', thing,Object.keys(connections))
         // console.timeEnd('connect');
         d.resolve(db);
     }).catch(function(err){

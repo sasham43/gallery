@@ -3,9 +3,11 @@ var bodyParser = require('body-parser');
 var config = require('./config').get();
 
 var root = require('./root');
+var works = require('./works')
 // var locations = require('./locations');
 // var gigs = require('./gigs');
 // var maps = require('./maps');
+
 
 var dbconn = require('./db');
 dbconn('gallery-db');
@@ -35,6 +37,7 @@ app.use('/api',function(req, res, next){
 // app.use('/api/locations',locations);
 // app.use('/api/gigs',gigs);
 // app.use('/api/maps',maps);
+app.use('/api/works',works);
 app.use('/', root);
 
 app.use(function(err, req, res, next){
