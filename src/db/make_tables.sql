@@ -19,6 +19,7 @@ CREATE TABLE "public"."works" (
     "image_width" int,
     "inscription" text,
     "life_date" text,
+    "marks" text,
     "markings" text,
     "medium" text,
     "nationality" text,
@@ -32,6 +33,7 @@ CREATE TABLE "public"."works" (
     "on_view" boolean,
     "see_also" text[],
     "signed" text,
+    "style" text,
     "text" text,
     "title" text,
     PRIMARY KEY ("id")

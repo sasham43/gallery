@@ -67,8 +67,8 @@ router.get('/load', function(req, res, next){
               "id": "",
               "image": "",
               "image_copyright": "",
-              "image_height": "",
-              "image_width": "",
+              "image_height": 0,
+              "image_width": 0,
               "inscription": "",
               "life_date": "",
               "markings": "",
@@ -107,7 +107,7 @@ router.get('/load', function(req, res, next){
                         // }
 
                         // var parsed = JSON.parse(example);
-                        work = _.extend(example, work);
+                        work = _.extend(Object.assign({}, example), work);
                         keys = _.union(keys, Object.keys(work))
                         var length = Object.keys(work).length;
                         if(length < 36){
@@ -122,17 +122,70 @@ router.get('/load', function(req, res, next){
             });
             console.log('all keys', keys, keys.length);
 
-            works.forEach(function(work){
+            works.forEach(function(work, i){
+                // if(i < 10){
+                //     console.log('work', work);
+                // }
+                if(typeof work.culture == 'string'){
+                    console.log('culture work', work);
+                }
+                if(typeof work.image_height == 'string'){
+                    console.log('height work', work);
+                    work.image_height = 0;
+                }
+                if(typeof work.image_width == 'string'){
+                    console.log('width work', work);
+                    work.image_width = 0;
+                }
+
+
                 if(work){
-                    req.db.works.insert(work).then(function(result){
-                        console.log('result', result);
-                        req.status(200).send(result);
+                    req.db.load_works([
+                        work.accession_number,
+                        work.artist,
+                        work.catalogue_raissonne,
+                        work.classification,
+                        work.continent,
+                        work.country,
+                        work.creditline,
+                        work.culture,
+                        work.dated,
+                        work.department,
+                        work.description,
+                        work.dimension,
+                        work.mia_url,
+                        work.image,
+                        work.image_copyright,
+                        work.image_height,
+                        work.image_width,
+                        work.inscription,
+                        work.life_date,
+                        work.marks,
+                        work.markings,
+                        work.medium,
+                        work.nationality,
+                        work.object_name,
+                        work.portfolio,
+                        work.provenance,
+                        work.restricted,
+                        work.rights_type,
+                        work.role,
+                        work.room,
+                        work.on_view,
+                        work.see_also,
+                        work.signed,
+                        work.style,
+                        work.text,
+                        work.title
+                    ]).then(function(result){
+                        // console.log('result', result);
+                        // req.status(200).send(result);
                     }).catch(function(err){
                         console.log('err', err);
-                        req.status(500).send(err);
+                        // res.status(500).send(err);
                     });
                 } else {
-                    console.log('wor', work)
+                    // console.log('wor', work)
                 }
 
             })
