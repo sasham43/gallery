@@ -25,6 +25,15 @@
                 <th>
                     Description
                 </th>
+                <th>
+                    <!-- image -->
+                </th>
+                <th>
+                    Score
+                </th>
+                <th>
+                    Magnitude
+                </th>
             </thead>
             <tbody>
                 <tr dir-paginate="work in works | filter: search | itemsPerPage: 20">
@@ -38,10 +47,21 @@
                         {{work.artist}}
                     </td>
                     <td>
-                        {{work.description}}
+                        {{work.text}}
                     </td>
                     <td>
                         <img class="thumbnail" ng-src="{{work.image_url}}" />
+                    </td>
+                    <td>
+                        <div ng-show="work.score">
+                            {{work.score}}
+                        </div>
+                        <div ng-show="!work.score">
+                            <button ng-click="scoreWork(work.id)" class="btn btn-default">Score</button>
+                        </div>
+                    </td>
+                    <td>
+                        {{work.magnitude}}
                     </td>
                 </tr>
             </tbody>

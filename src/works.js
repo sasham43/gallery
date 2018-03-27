@@ -11,7 +11,7 @@ var collection_path = '../../art/collection/objects';
 var works = [];
 
 router.get('/', function(req, res, next){
-    req.db.works_on_view.find().then(function(response){
+    req.db.works_on_view_gs.find().then(function(response){
         console.log('got stuff', response.length);
         res.send(response);
     }).catch(function(err){

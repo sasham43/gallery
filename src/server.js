@@ -1,9 +1,11 @@
+require("dotenv").config();
 var express = require('express');
 var bodyParser = require('body-parser');
 var config = require('./config').get();
 
 var root = require('./root');
 var works = require('./works');
+var sentiment = require('./sentiment');
 
 var dbconn = require('./db');
 dbconn('gallery-db');
@@ -30,6 +32,7 @@ app.use('/api',function(req, res, next){
   });
 });
 
+app.use('/api/sentiment',sentiment);
 app.use('/api/works',works);
 app.use('/', root);
 
@@ -43,5 +46,5 @@ app.get('*', function (req, res) {
 });
 
 app.listen(listenPort, function(){
-  console.log('server listening on port', listenPort + '...');
+  console.log('server listening on port', listenPort + '...' + Object.keys(process.env));
 });
