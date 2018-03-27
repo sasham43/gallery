@@ -6,7 +6,54 @@
         "footer"
 }
 
+.header {
+    grid-area: header;
+}
+
+.main {
+    grid-area: main;
+}
+
+.footer {
+    grid-area: footer;
+}
+
+.controls {
+    display: grid;
+    grid-template-areas:
+        "search page-links"
+}
+
+.search-container {
+    grid-area: search;
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+}
+
+.page-controls-container {
+    grid-area: page-links;
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+}
+
+.page-controls-container,
+.search-container {
+    display: inline-block;
+}
+
+.search {
+    width: 100%;
+    border: none;
+    border-bottom: solid 1px #333;
+    padding: 10px;
+}
+
+.page-controls {
+    float: right;
+}
 
 .thumbnail {
-    max-width: 10%;
+    max-width: 10vw;
 }
