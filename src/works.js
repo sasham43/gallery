@@ -10,6 +10,16 @@ var collection_path = '../../art/collection/objects';
 
 var works = [];
 
+router.get('/', function(req, res, next){
+    req.db.works_on_view.find().then(function(response){
+        console.log('got stuff', response.length);
+        res.send(response);
+    }).catch(function(err){
+        console.log('err', err);
+        res.status(500).send(err);
+    });
+});
+
 router.get('/load', function(req, res, next){
     fs.readdir(collection_path, function(err, items){
         if(err)

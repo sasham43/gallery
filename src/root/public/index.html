@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="GalleryApp">
   <head>
     <meta charset="utf-8">
     <title>Gallery</title>
+    <link href="css/main.css" rel="stylesheet" />
 
     <script src="js/components/angular.min.js"></script>
+    <script src="js/components/dirPagination.js"></script>
     <script src="js/app.js"></script>
   </head>
   <body>
-    <h1>body</h1>
+    <div ng-include="'partials/gallery.html'" ng-controller="GalleryController">
+
+    </div>
   </body>
 </html>

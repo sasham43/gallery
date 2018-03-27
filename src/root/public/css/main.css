@@ -1,0 +1,12 @@
+.container {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer"
+}
+
+
+.thumbnail {
+    max-width: 10%;
+}

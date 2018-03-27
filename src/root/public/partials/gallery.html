@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="header">
+        MIA Works
+    </div>
+    <div class="main">
+        <div class="controls">
+            <div class="search-container">
+                <input class="search" ng-model="search" ng-model-options="{debounce: 300}" />
+            </div>
+            <div class="page-controls-container">
+                <dir-pagination-controls></dir-pagination-controls>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Artist
+                </th>
+                <th>
+                    Description
+                </th>
+            </thead>
+            <tbody>
+                <tr dir-paginate="work in works | filter: search | itemsPerPage: 20">
+                    <td>
+                        {{work.id}}
+                    </td>
+                    <td>
+                        {{work.title}}
+                    </td>
+                    <td>
+                        {{work.artist}}
+                    </td>
+                    <td>
+                        {{work.description}}
+                    </td>
+                    <td>
+                        <img class="thumbnail" ng-src="{{work.image_url}}" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+
+    </div>
+</div>
