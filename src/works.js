@@ -20,6 +20,30 @@ router.get('/', function(req, res, next){
     });
 });
 
+router.get('/random', function(req, res, next){
+    req.db.query('SELECT * FROM works_on_view ORDER BY random() LIMIT 1').then(function(response){
+        console.log('got random', response);
+        res.send(response);
+    }).catch(function(err){
+        console.log('err', err);
+        res.status(500).send(err);
+    });
+});
+
+router.post('/rate', function(req, res, next){
+    req.db.word_ratings.save({
+        work_id: req.body.id,
+        valence: req.body.valence,
+        arousal: req.body.arousal
+    }).then(function(response){
+        console.log('rated', response);
+        res.send(response);
+    }).catch(function(err){
+        console.log('err', err);
+        res.status(500).send(err);
+    });
+});
+
 router.get('/load', function(req, res, next){
     fs.readdir(collection_path, function(err, items){
         if(err)

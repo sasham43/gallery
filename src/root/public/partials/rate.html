@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="header">
+        Rate a Work
+    </div>
+    <div class="main">
+        <div class="button-container">
+            <button ng-click="load()" class="btn btn-default">Get Another Work</button>
+        </div>
+        <div class="painting-container">
+            <img class="painting" ng-src="{{painting.image_url}}" />
+        </div>
+    </div>
+    <div class="footer">
+        <div class="rating-container">
+            <span ng-click="rate(-.3, -1)">Bored</span>
+            <span ng-click="rate(-.7, -.7)">Depressed</span>
+            <span ng-click="rate(-1, -.3)">Sad</span>
+            <span ng-click="rate(-1, .3)">Upset</span>
+            <span ng-click="rate(-.7, .7)">Nervous</span>
+            <span ng-click="rate(-.3, 1)">Tense</span>
+            <span ng-click="rate(.3, 1)">Alert</span>
+            <span ng-click="rate(.7, .7)">Excited</span>
+            <span ng-click="rate(1, .3)">Happy</span>
+            <span ng-click="rate(1, -.3)">Contented</span>
+            <span ng-click="rate(.7, -.7)">Serene</span>
+            <span ng-click="rate(.3, -1)">Relaxed</span>
+        </div>
+    </div>
+</div>
