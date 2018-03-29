@@ -13,30 +13,30 @@
         </div>
         <table class="table">
             <thead>
-                <th>
+                <th ng-click="sortBy('id')">
                     ID
                 </th>
-                <th>
+                <th ng-click="sortBy('title')">
                     Title
                 </th>
-                <th>
+                <th ng-click="sortBy('artist')">
                     Artist
                 </th>
-                <th>
+                <th ng-click="sortBy('text')">
                     Description
                 </th>
                 <th>
                     <!-- image -->
                 </th>
-                <th>
+                <th ng-click="sortBy('score')">
                     Score
                 </th>
-                <th>
+                <th ng-click="sortBy('magnitude')">
                     Magnitude
                 </th>
             </thead>
             <tbody>
-                <tr dir-paginate="work in works | filter: search | itemsPerPage: 20">
+                <tr dir-paginate="work in works | orderBy: sort_category : reverse | filter: search | itemsPerPage: 20">
                     <td>
                         {{work.id}}
                     </td>
@@ -54,14 +54,14 @@
                     </td>
                     <td>
                         <div ng-show="work.score">
-                            {{work.score}}
+                            {{work.score | number: 2}}
                         </div>
                         <div ng-show="!work.score">
                             <button ng-click="scoreWork(work.id)" class="btn btn-default">Score</button>
                         </div>
                     </td>
                     <td>
-                        {{work.magnitude}}
+                        {{work.magnitude | number: 2}}
                     </td>
                 </tr>
             </tbody>

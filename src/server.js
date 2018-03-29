@@ -46,5 +46,5 @@ app.get('*', function (req, res) {
 });
 
 app.listen(listenPort, function(){
-  console.log('server listening on port', listenPort + '...' + Object.keys(process.env));
+  console.log('server listening on port', listenPort + '...');
 });

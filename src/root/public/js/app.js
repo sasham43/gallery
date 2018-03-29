@@ -12,6 +12,11 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination'])
 .controller('GalleryController', function($scope, WorkFactory){
     console.log('gallery loaded');
 
+    $scope.sortBy = function(category){
+        $scope.sort_category = category;
+        $scope.reverse = !$scope.reverse;
+    };
+
     $scope.loadWork = function(){
         WorkFactory.getWorks().then(function(resp){
             console.log('got works', resp);
