@@ -68,6 +68,12 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
     }
 })
 .controller('RateController', function($scope, WorkFactory){
+    $scope.painting = {};
+    $scope.ratings = {
+        id: null,
+        words: []
+    };
+
     $scope.load = function(){
         WorkFactory.getRandom().then(function(resp){
             console.log('random', resp);
@@ -75,19 +81,33 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
             var split = $scope.painting.mia_url.split('/');
             var int_id = split[split.length-1];
             $scope.painting.image_url = `http://api.artsmia.org/images/${int_id}/small.jpg`;
+
+            // reset ratings
+            $scope.ratings = {
+                id: null,
+                words: []
+            };
         }).catch(function(err){
             console.log('err', err);
         });
     };
     $scope.load();
 
-    $scope.rate = function(valence, arousal){
-        WorkFactory.rateWork({
-            id: $scope.painting.id,
-            valence: valence,
-            arousal: arousal
-        }).then(function(resp){
+    $scope.present = function(word){
+        return $scope.ratings.words.find(function(rating_word){
+            return word == rating_word;
+        });
+    };
+
+    $scope.select = function(word){
+        $scope.ratings.id = $scope.painting.id;
+        $scope.ratings.words.push(word);
+    };
+
+    $scope.rate = function(){
+        WorkFactory.rateWork($scope.ratings).then(function(resp){
             console.log('rated', resp);
+            $scope.load();
         },function(err){
             console.log('failed to score works', err);
         });

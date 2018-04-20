@@ -31,11 +31,73 @@ router.get('/random', function(req, res, next){
 });
 
 router.post('/rate', function(req, res, next){
-    req.db.word_ratings.save({
-        work_id: req.body.id,
-        valence: req.body.valence,
-        arousal: req.body.arousal
-    }).then(function(response){
+
+    var input = [];
+    var work_id = req.body.id;
+    var ratings = [];
+
+    req.body.words.forEach(function(word){
+        var valence, arousal;
+
+        switch(word){
+            case 'bored':
+                valence = -.3;
+                arousal = -1;
+                break;
+            case 'depressed':
+                valence = -.7;
+                arousal = -.7;
+                break;
+            case 'sad':
+                valence = -1;
+                arousal = -.3;
+                break;
+            case 'upset':
+                valence = -1;
+                arousal = -.3;
+                break;
+            case 'nervous':
+                valence = -.7;
+                arousal = .7;
+                break;
+            case 'tense':
+                valence = -.3;
+                arousal = 1;
+                break;
+            case 'alert':
+                valence = .3;
+                arousal = 1;
+                break;
+            case 'excited':
+                valence = .7;
+                arousal = .7;
+                break;
+            case 'happy':
+                valence = 1;
+                arousal = .3;
+                break;
+            case 'contented':
+                valence = 1;
+                arousal = -.3;
+                break;
+            case 'serene':
+                valence = .7;
+                arousal = -.7;
+                break;
+            case 'relaxed':
+                valence = .3;
+                arousal = -1;
+                break;
+        }
+
+        ratings.push({
+            work_id: work_id,
+            valence: valence,
+            arousal: arousal
+        });
+    });
+
+    req.db.word_ratings.insert(ratings).then(function(response){
         console.log('rated', response);
         res.send(response);
     }).catch(function(err){
