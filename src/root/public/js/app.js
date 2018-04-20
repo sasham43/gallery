@@ -32,6 +32,9 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
         },
         getPaintings: function(){
             return $http.get('/api/works/paintings');
+        },
+        getVision: function(int_id, id){
+            return $http.get('/api/sentiment/vision/' + int_id + '/' + id);
         }
     }
 })
@@ -100,6 +103,7 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
             $scope.painting = resp.data[0];
             var split = $scope.painting.mia_url.split('/');
             var int_id = split[split.length-1];
+            $scope.painting.int_id = int_id;
             $scope.painting.image_url = `http://api.artsmia.org/images/${int_id}/small.jpg`;
 
             // reset ratings
@@ -122,6 +126,14 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
     $scope.select = function(word){
         $scope.ratings.id = $scope.painting.id;
         $scope.ratings.words.push(word);
+    };
+
+    $scope.vision = function(){
+        WorkFactory.getVision($scope.painting.int_id, $scope.painting.id).then(function(resp){
+            console.log('rated', resp);
+        },function(err){
+            console.log('failed to score works', err);
+        });
     };
 
     $scope.rate = function(){
