@@ -29,6 +29,9 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
         },
         rateWork: function(options){
             return $http.post('/api/works/rate', options);
+        },
+        getPaintings: function(){
+            return $http.get('/api/works/paintings');
         }
     }
 })
@@ -57,6 +60,23 @@ angular.module('GalleryApp', ['angularUtils.directives.dirPagination', 'ngRoute'
         });
     };
     $scope.loadWork();
+
+    $scope.loadPaintings = function(){
+        WorkFactory.getPaintings().then(function(resp){
+            console.log('got works', resp);
+            $scope.works = resp.data;
+
+            $scope.works = $scope.works.map(function(work){
+                var split = work.mia_url.split('/');
+                var int_id = split[split.length-1];
+                work.image_url = `http://api.artsmia.org/images/${int_id}/small.jpg`;
+
+                return work;
+            });
+        },function(err){
+            console.log('failed to get works', err);
+        });
+    }
 
     $scope.scoreWork = function(id){
         WorkFactory.scoreWork(id).then(function(resp){

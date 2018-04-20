@@ -290,26 +290,13 @@ router.get('/load', function(req, res, next){
             console.log('err', err);
             res.status(500).send(err);
         });
-
-        // works.forEach(function(work){
-        //     req.db.works.insert(work).then(function(result){
-        //         console.log('result', result);
-        //         req.status(200).send(result);
-        //     }).catch(function(err){
-        //         console.log('err', err);
-        //         req.status(500).send(err);
-        //     });
-        // })
-
-
-
-        // fs.writeFile('mia.csv', result, function(err, response){
-        //     if(err)
-        //         console.log('write err', err);
-        //
-        //     console.log('file written');
-        // })
     });
 });
+
+router.get('/paintings', function(req, res, next){
+    req.db.paintings.find().then(function(resp){
+        res.send(resp);
+    }).catch(next);
+})
 
 module.exports = router;
