@@ -1,7 +1,7 @@
 // var fs = require('fs');
 var fs = require('graceful-fs');
 var path = require('path');
-// var json2csv = require('json2csv');
+const csv = require('csvtojson')
 var express = require('express');
 var _ = require('underscore');
 var router = express.Router();
@@ -297,6 +297,41 @@ router.get('/paintings', function(req, res, next){
     req.db.paintings.find().then(function(resp){
         res.send(resp);
     }).catch(next);
-})
+});
+
+router.get('/abstract', function(req, res, next){
+    console.log('do abstract');
+    var csvStr = 'ABSTRACT_groundTruth.csv';
+    var paintings = [];
+
+    csv({noheader:true})
+    .fromFile(csvStr)
+    .on('csv',(csvRow)=>{ // this func will be called 3 times
+        // console.log('thing', csvRow) // => [1,2,3] , [4,5,6]  , [7,8,9]
+        paintings.push(csvRow)
+    })
+    .on('done',()=>{
+        //parsing finished
+        paintings.forEach((row, i)=>{
+            if(i > 0){
+                req.db.abstract.save({
+                    image: row[0],
+                    amusement: row[1],
+                    anger: row[2],
+                    awe: row[3],
+                    content: row[4],
+                    disgust: row[5],
+                    excitement: row[6],
+                    fear: row[7],
+                    sad: row[8]
+                }).then((resp)=>{
+                    //
+                }).catch((err)=>{
+                    console.log('err', err);
+                })
+            }
+        })
+    })
+});
 
 module.exports = router;
