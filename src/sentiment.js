@@ -2,7 +2,7 @@ require("dotenv").config();
 var express = require('express');
 var _ = require('underscore');
 var router = express.Router();
-
+var path = require('path');
 // import series from 'async/series';
 
 // Imports the Google Cloud client library
@@ -52,10 +52,13 @@ router.get('/vision/:int_id/:id', function(req, res, next){
 
 router.get('/score_paintings', function(req, res, next){
     var promises = [];
-    req.db.find_paintings_to_score().then(function(paintings){
+    req.db.abstract.find().then(function(paintings){
         paintings.forEach(function(p, index){
-            var int_id = getIntId(p);
-            var image_url = `http://api.artsmia.org/images/${int_id}/small.jpg`;
+            // var int_id = getIntId(p);
+            // var image_url = `http://api.artsmia.org/images/${int_id}/small.jpg`;
+            var base = path.join(process.env.HOME, '/Downloads/testImages_abstract/');
+            var image = p.image.replace(/'/g, '');
+            var image_url = base + image;
             vision_client
               .imageProperties(image_url)
               .then(results => {
@@ -64,8 +67,8 @@ router.get('/score_paintings', function(req, res, next){
                       const properties = results[0].imagePropertiesAnnotation;
                       const colors = properties.dominantColors.colors;
                       colors.forEach((color, i)=> {
-                          req.db.vision_scores.save({
-                              work_id: p.id,
+                          req.db.abstract_colors.save({
+                              abstract_id: p.id,
                               r: color.color.red,
                               g: color.color.green,
                               b: color.color.blue,
@@ -85,6 +88,17 @@ router.get('/score_paintings', function(req, res, next){
         })
     })
 });
+
+router.get('/score_abstract', function(req, res, next){
+    var base = '~/Downloads/testImages_abstract/';
+    req.db.abstract.find().then(function(abstract){
+        var image = abstract.image.replace(/'/g, '');
+        vision_client.imageProperties(base + image).then(results => {
+            if(results[0].imagePropertiesAnnotation){}
+        })
+    }).catch(next);
+})
+
 
 function scorePainting(painting, callback){
     var id = painting.id;
