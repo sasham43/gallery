@@ -93,6 +93,71 @@ router.get('/score_paintings', function(req, res, next){
     })
 });
 
+router.get('/calculate_abstract', function(req, res, next){
+    req.db.abstract.find().then(function(resp){
+        var abstracts = resp;
+
+        abstracts.forEach((abstract)=>{
+            var stripped = _.omit(abstract, ['id', 'image', 'valence', 'arousal']);
+
+            var total = 0;
+            for (key in stripped) {
+                total += stripped[key];
+            }
+
+            console.log('total', total);
+
+            var v_total = 0;
+            var a_total = 0;
+
+            for (key in stripped) {
+                var v_mod, a_mod;
+
+                switch(key){
+                    case 'excitement':
+                    case 'amusement':
+                        v_mod = 1;
+                        a_mod = 1;
+                        break;
+                    case 'awe':
+                    case 'content':
+                        v_mod = 1;
+                        a_mod = -1;
+                        break;
+                    case 'anger':
+                    case 'disgust':
+                        v_mod = -1;
+                        a_mod = 1;
+                        break;
+                    case 'sad':
+                    case 'fear':
+                        v_mod = -1;
+                        a_mod = -1;
+                        break;
+                }
+                var v = (v_mod * stripped[key]);
+                var a = (a_mod * stripped[key]);
+                console.log(`${key}, ${stripped[key]}: V ${v} : A ${a}`);
+                // console.log(`${key}:
+                //     V ${stripped[key]} * ${v_mod} = ${v}
+                //     A ${stripped[key]} * ${a_mod} = ${a}
+                //     `);
+
+                v_total += v;
+                a_total += a;
+            }
+
+            var v_float = v_total / total;
+            var a_float = a_total / total;
+
+            var v_actual = numMap(v_float, -1, 1, 0, 1);
+            var a_actual = numMap(a_float, -1, 1, 0, 1);
+
+            console.log(`calcled: ${abstract.image} | V ${v_actual} : A ${a_actual}`);
+        })
+    }).catch(next);
+})
+
 
 function scorePainting(painting, callback){
     var id = painting.id;
@@ -158,6 +223,10 @@ function getIntId(work){
     var split = work.mia_url.split('/');
     var int_id = split[split.length-1];
     return int_id;
+}
+
+function numMap (num, in_min, in_max, out_min, out_max) {
+  return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 module.exports = router;
