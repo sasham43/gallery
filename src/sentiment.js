@@ -52,6 +52,10 @@ router.get('/vision/:int_id/:id', function(req, res, next){
 
 router.get('/score_paintings', function(req, res, next){
     var promises = [];
+
+
+    // this is bad change it back
+
     req.db.abstract.find().then(function(paintings){
         paintings.forEach(function(p, index){
             // var int_id = getIntId(p);
@@ -88,16 +92,6 @@ router.get('/score_paintings', function(req, res, next){
         })
     })
 });
-
-router.get('/score_abstract', function(req, res, next){
-    var base = '~/Downloads/testImages_abstract/';
-    req.db.abstract.find().then(function(abstract){
-        var image = abstract.image.replace(/'/g, '');
-        vision_client.imageProperties(base + image).then(results => {
-            if(results[0].imagePropertiesAnnotation){}
-        })
-    }).catch(next);
-})
 
 
 function scorePainting(painting, callback){
