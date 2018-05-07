@@ -153,7 +153,35 @@ router.get('/calculate_abstract', function(req, res, next){
             var v_actual = numMap(v_float, -1, 1, 0, 1);
             var a_actual = numMap(a_float, -1, 1, 0, 1);
 
+            abstract.valence = v_actual;
+            abstract.arousal = a_actual;
+
             console.log(`calcled: ${abstract.image} | V ${v_actual} : A ${a_actual}`);
+            req.db.abstract.save(abstract).then(resp=>{
+                // res.send(resp);
+            }).catch(next);
+        })
+
+        // req.db.abstract.save(abstracts).then(resp=>{
+        //     res.send(resp);
+        // }).catch(next);
+    }).catch(next);
+})
+
+router.get('/abstract/generate_int', function(req, res, next){
+    req.db.abstract_colors.find().then(resp=>{
+        resp.forEach(a=>{
+            var r = a.r;
+            var g = a.g;
+            var b = a.b;
+
+            var color_int = (r<<16) + (g<<8) + b;
+
+            a.color_int = color_int;
+
+            req.db.abstract_colors.save(a).then(resp=>{
+                // console.log('did a whatever');
+            }).catch(next);
         })
     }).catch(next);
 })
