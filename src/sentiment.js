@@ -186,6 +186,31 @@ router.get('/abstract/generate_int', function(req, res, next){
     }).catch(next);
 })
 
+router.get('/abstract/check_int', function(req, res, next){
+    req.db.abstract_colors.find().then(resp=>{
+        resp.forEach(a=>{
+            var generated = getRGBfromI(a.color_int);
+            console.log(`real: ${a.r}, ${a.g}, ${a.b} | int: ${generated[0]}, ${generated[1]}, ${generated[2]}`)
+        })
+
+        res.send('okay')
+    })
+})
+
+function getRGBfromI(i){
+    var b = i & 255;
+    var g = (i >> 8) & 255;
+    var r = (i >> 16) & 255;
+
+    return [r, g, b];
+}
+
+// def getRGBfromI(RGBint):
+//     blue =  RGBint & 255
+//     green = (RGBint >> 8) & 255
+//     red =   (RGBint >> 16) & 255
+//     return red, green, blue
+
 
 function scorePainting(painting, callback){
     var id = painting.id;
