@@ -3,6 +3,8 @@ var express = require('express');
 var _ = require('underscore');
 var router = express.Router();
 var path = require('path');
+var json2csv = require('json2csv')
+var fs = require('fs')
 // import series from 'async/series';
 
 // Imports the Google Cloud client library
@@ -195,6 +197,21 @@ router.get('/abstract/check_int', function(req, res, next){
 
         res.send('okay')
     })
+})
+
+router.get('/abstract/make_valence_csv', function(req, res, next){
+    req.db.get_abstract_valence().then(resp=>{
+        const fields = ['id', 'valence', 'pixel_fraction', 'score', 'color_int'];
+        const opts = { fields };
+        try {
+          const csv = json2csv.parse(resp, opts);
+          console.log(csv);
+          fs.writeFile('abstract_valence.csv', csv, next);
+          res.send(csv);
+        } catch (err) {
+          console.error(err);
+        }
+    }).catch(next);
 })
 
 function getRGBfromI(i){
