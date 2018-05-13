@@ -20,10 +20,10 @@ print("Local copy of the dataset file: {}".format(train_dataset_fp))
 
 def parse_csv(line):
   # example_defaults = [[0.], [0.], [0.], [0.], [0]]  # sets field types
-  example_defaults = [[0], [0], [0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0],[0.,0.,0]]
+  example_defaults = [[0], [0.], [0.], [0.], [0]]
   parsed_line = tf.decode_csv(line, example_defaults)
   # First 4 fields are features, combine into single tensor
-  features = tf.reshape(parsed_line[2:11], shape=(10,))
+  features = tf.reshape(parsed_line[2:4], shape=(3,))
   # Last field is the label
   label = tf.reshape(parsed_line[1], shape=())
   return features, label
