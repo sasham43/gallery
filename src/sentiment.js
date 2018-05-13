@@ -206,50 +206,48 @@ router.get('/abstract/make_valence_csv', function(req, res, next){
         console.log('resp', resp);
 
         // massage data
-        var data = [];
-        resp.forEach(line=>{
-            // go through data, find obj with correct id, attach extra array
-            var obj = data.find(d=>{
-                return line.id == d.id;
-            });
-
-            if(obj){
-                for(key in obj){
-                    if(key.includes('color') && !obj[key]){
-                        obj[key] = [
-                            line.pixel_fraction,
-                            line.score,
-                            line.color_int
-                        ]
-                        break;
-                    }
-                }
-            } else {
-                data.push({
-                    id: line.id,
-                    valence: line.valence,
-                    color1: [
-                        line.pixel_fraction,
-                        line.score,
-                        line.color_int
-                    ],
-                    color2: undefined,
-                    color3: undefined,
-                    color4: undefined,
-                    color5: undefined,
-                    color6: undefined,
-                    color7: undefined,
-                    color8: undefined,
-                    color9: undefined,
-                    color10: undefined,
-                });
-            }
-        })
-
-
+        // var data = [];
+        // resp.forEach(line=>{
+        //     // go through data, find obj with correct id, attach extra array
+        //     var obj = data.find(d=>{
+        //         return line.id == d.id;
+        //     });
+        //
+        //     if(obj){
+        //         for(key in obj){
+        //             if(key.includes('color') && !obj[key]){
+        //                 obj[key] = [
+        //                     line.pixel_fraction,
+        //                     line.score,
+        //                     line.color_int
+        //                 ]
+        //                 break;
+        //             }
+        //         }
+        //     } else {
+        //         data.push({
+        //             id: line.id,
+        //             valence: line.valence,
+        //             color1: [
+        //                 line.pixel_fraction,
+        //                 line.score,
+        //                 line.color_int
+        //             ],
+        //             color2: undefined,
+        //             color3: undefined,
+        //             color4: undefined,
+        //             color5: undefined,
+        //             color6: undefined,
+        //             color7: undefined,
+        //             color8: undefined,
+        //             color9: undefined,
+        //             color10: undefined,
+        //         });
+        //     }
+        // })
 
         try {
-          const csv = json2csv.parse(data, opts);
+          const csv = json2csv.parse(resp, opts);
           console.log(csv);
           fs.writeFile('abstract_valence.csv', csv, next);
           res.send(csv);
