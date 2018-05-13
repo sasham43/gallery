@@ -201,10 +201,55 @@ router.get('/abstract/check_int', function(req, res, next){
 
 router.get('/abstract/make_valence_csv', function(req, res, next){
     req.db.get_abstract_valence().then(resp=>{
-        const fields = ['id', 'valence', 'pixel_fraction', 'score', 'color_int'];
+        const fields = ['id', 'valence', 'color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9', 'color10'];
         const opts = { fields };
+        console.log('resp', resp);
+
+        // massage data
+        var data = [];
+        resp.forEach(line=>{
+            // go through data, find obj with correct id, attach extra array
+            var obj = data.find(d=>{
+                return line.id == d.id;
+            });
+
+            if(obj){
+                for(key in obj){
+                    if(key.includes('color') && !obj[key]){
+                        obj[key] = [
+                            line.pixel_fraction,
+                            line.score,
+                            line.color_int
+                        ]
+                        break;
+                    }
+                }
+            } else {
+                data.push({
+                    id: line.id,
+                    valence: line.valence,
+                    color1: [
+                        line.pixel_fraction,
+                        line.score,
+                        line.color_int
+                    ],
+                    color2: undefined,
+                    color3: undefined,
+                    color4: undefined,
+                    color5: undefined,
+                    color6: undefined,
+                    color7: undefined,
+                    color8: undefined,
+                    color9: undefined,
+                    color10: undefined,
+                });
+            }
+        })
+
+
+
         try {
-          const csv = json2csv.parse(resp, opts);
+          const csv = json2csv.parse(data, opts);
           console.log(csv);
           fs.writeFile('abstract_valence.csv', csv, next);
           res.send(csv);
@@ -221,12 +266,6 @@ function getRGBfromI(i){
 
     return [r, g, b];
 }
-
-// def getRGBfromI(RGBint):
-//     blue =  RGBint & 255
-//     green = (RGBint >> 8) & 255
-//     red =   (RGBint >> 16) & 255
-//     return red, green, blue
 
 
 function scorePainting(painting, callback){
