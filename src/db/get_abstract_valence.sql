@@ -1,6 +1,6 @@
 select
     abstract.id,
-    valence,
+    round(valence::float * 100) as valence,
     pixel_fraction,
     score,
     color_int
